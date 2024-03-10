@@ -23,14 +23,17 @@ public class BishopBlack implements Figure {
                     String.format("Could not way by diagonal from %s to %s", this.position, dest)
             );
         }
-        int size = Math.abs(this.position.getX() - dest.getX());
+        int startX = this.position.getX();
+        int startY = this.position.getY();
+        int size = Math.abs(startX - dest.getX());
         Cell[] steps = new Cell[size];
-        int deltaX = this.position.getX() < dest.getX() ? 1 : -1;
-        int deltaY = this.position.getY() < dest.getY() ? 1 : -1;
-        Cell nextStep = this.position;
-        for (int index = 0; index < size; index++) {
-            steps[index] = Cell.findBy(nextStep.getX() + deltaX, nextStep.getY() + deltaY);
-            nextStep = steps[index];
+        int deltaX = startX < dest.getX() ? 1 : -1;
+        int deltaY = startY < dest.getY() ? 1 : -1;
+        steps[0] = Cell.findBy(startX + deltaX, startY + deltaY);
+        for (int index = 1; index < size; index++) {
+            steps[index] = Cell.findBy(
+                    steps[index - 1].getX() + deltaX,
+                    steps[index - 1].getY() + deltaY);
         }
         return steps;
     }
